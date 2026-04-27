@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -5,511 +6,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>英语听写小助手</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         .header {
-            text-align: center;
-            padding: 30px 20px;
+            text-align: center; padding: 30px 20px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            margin-bottom: 30px;
+            border-radius: 20px; margin-bottom: 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
-
-        .header h1 {
-            font-size: 2.2em;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
+        .header h1 { font-size: 2.2em; color: #667eea; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 1.1em; }
         .login-section {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
+            border-radius: 20px; padding: 40px; text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
-
         .role-select {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            display: flex; gap: 20px; justify-content: center;
+            margin-top: 30px; flex-wrap: wrap;
         }
-
         .role-btn {
-            padding: 25px 40px;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            padding: 25px 40px; font-size: 1.2em; border: none;
+            border-radius: 15px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
-
-        .role-btn.teacher {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .role-btn.student {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        .role-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .role-icon {
-            font-size: 3em;
-        }
-
-        .student-login {
-            margin-top: 30px;
-            display: none;
-        }
-
-        .student-login.active {
-            display: block;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
+        .role-btn.teacher { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .role-btn.student { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .role-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+        .role-icon { font-size: 3em; }
+        .student-login { margin-top: 30px; display: none; }
+        .student-login.active { display: block; }
+        .input-group { margin-bottom: 20px; }
         .input-group input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            outline: none;
+            width: 100%; padding: 15px 20px; font-size: 1.1em;
+            border: 2px solid #e0e0e0; border-radius: 10px; outline: none;
             transition: border-color 0.3s;
         }
-
-        .input-group input:focus {
-            border-color: #667eea;
-        }
-
+        .input-group input:focus { border-color: #667eea; }
         .btn {
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 15px 40px; font-size: 1.1em; border: none;
+            border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .teacher-panel {
-            display: none;
-        }
-
-        .teacher-panel.active {
-            display: block;
-        }
-
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); }
+        .teacher-panel, .student-panel { display: none; }
+        .teacher-panel.active, .student-panel.active { display: block; }
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95); border-radius: 20px;
+            padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
-
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        .task-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
+        .card h2 { color: #667eea; margin-bottom: 20px; font-size: 1.5em; }
+        .task-input { display: flex; gap: 10px; margin-bottom: 20px; }
         .task-input input {
-            flex: 1;
-            padding: 15px;
-            font-size: 1em;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            outline: none;
+            flex: 1; padding: 15px; font-size: 1em;
+            border: 2px solid #e0e0e0; border-radius: 10px; outline: none;
         }
-
-        .task-input input:focus {
-            border-color: #667eea;
-        }
-
-        .task-list {
-            list-style: none;
-        }
-
+        .task-input input:focus { border-color: #667eea; }
+        .task-list { list-style: none; }
         .task-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            display: flex; align-items: center; padding: 15px;
+            background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;
         }
-
-        .task-item .word {
-            flex: 1;
-            font-size: 1.2em;
-            font-weight: 500;
-        }
-
+        .task-item .word { flex: 1; font-size: 1.2em; font-weight: 500; }
         .task-item .delete-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
+            background: #ff4757; color: white; border: none;
+            padding: 8px 15px; border-radius: 8px; cursor: pointer;
         }
-
-        .student-panel {
-            display: none;
-        }
-
-        .student-panel.active {
-            display: block;
-        }
-
         .welcome-msg {
-            text-align: center;
-            padding: 20px;
+            text-align: center; padding: 20px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            color: white; border-radius: 15px; margin-bottom: 20px;
         }
-
-        .welcome-msg h2 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-        }
-
+        .welcome-msg h2 { font-size: 1.8em; margin-bottom: 5px; }
         .date-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.2); padding: 8px 20px;
+            border-radius: 20px; display: inline-block; margin-top: 10px;
         }
-
         .dictation-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            background: white; border-radius: 15px; padding: 25px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s;
         }
-
-        .dictation-card:hover {
-            transform: translateX(10px);
-        }
-
+        .dictation-card:hover { transform: translateX(10px); }
         .dictation-card .number {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
-            font-weight: bold;
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3em; font-weight: bold;
         }
-
-        .dictation-card .text {
-            flex: 1;
-            font-size: 1.4em;
-            font-weight: 500;
-            color: #333;
-        }
-
+        .dictation-card .text { flex: 1; font-size: 1.4em; font-weight: 500; color: #333; }
         .play-btn {
-            width: 60px;
-            height: 60px;
-            border: none;
-            border-radius: 50%;
+            width: 60px; height: 60px; border: none; border-radius: 50%;
             background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: white; font-size: 1.5em; cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
-        }
-
+        .play-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4); }
         .play-btn.playing {
             animation: pulse 1s infinite;
             background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
         }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         .progress-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 10px;
-            margin: 20px 0;
-            overflow: hidden;
+            background: #e0e0e0; border-radius: 10px; height: 10px;
+            margin: 20px 0; overflow: hidden;
         }
-
         .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            transition: width 0.3s ease;
+            height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px; transition: width 0.3s ease;
         }
-
-        .progress-text {
-            text-align: center;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .dictation-card.completed {
-            opacity: 0.7;
-            background: #f0fff0;
-        }
-
-        .dictation-card.completed .text {
-            text-decoration: line-through;
-        }
-
-        .task-date {
-            font-size: 1.1em;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .no-tasks {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .no-tasks .icon {
-            font-size: 4em;
-            margin-bottom: 15px;
-        }
-
+        .progress-text { text-align: center; color: #666; margin-bottom: 20px; }
+        .dictation-card.completed { opacity: 0.7; background: #f0fff0; }
+        .dictation-card.completed .text { text-decoration: line-through; }
+        .task-date { font-size: 1.1em; color: #666; margin-bottom: 15px; }
+        .no-tasks { text-align: center; padding: 40px; color: #999; }
+        .no-tasks .icon { font-size: 4em; margin-bottom: 15px; }
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); justify-content: center;
+            align-items: center; z-index: 1000;
         }
-
-        .modal.active {
-            display: flex;
-        }
-
+        .modal.active { display: flex; }
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
+            background: white; padding: 30px; border-radius: 15px;
+            text-align: center; max-width: 400px;
         }
-
-        .modal-content h3 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
+        .modal-content h3 { margin-bottom: 15px; color: #333; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
         .success-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(102, 126, 234, 0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(102, 126, 234, 0.9); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
         }
-
-        .success-overlay.active {
-            display: flex;
-        }
-
-        .success-content {
-            text-align: center;
-            color: white;
-        }
-
-        .success-content .icon {
-            font-size: 8em;
-            animation: bounce 0.5s ease;
-        }
-
-        .success-content h2 {
-            font-size: 2em;
-            margin-top: 20px;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
+        .success-overlay.active { display: flex; }
+        .success-content { text-align: center; color: white; }
+        .success-content .icon { font-size: 8em; animation: bounce 0.5s ease; }
+        .success-content h2 { font-size: 2em; margin-top: 20px; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.6em;
-            }
-            
-            .role-btn {
-                padding: 20px 30px;
-                font-size: 1em;
-            }
-            
-            .dictation-card {
-                flex-wrap: wrap;
-            }
-            
-            .play-btn {
-                width: 50px;
-                height: 50px;
-            }
+            .header h1 { font-size: 1.6em; }
+            .role-btn { padding: 20px 30px; font-size: 1em; }
+            .dictation-card { flex-wrap: wrap; }
+            .play-btn { width: 50px; height: 50px; }
         }
-
         .back-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 1em;
+            background: #f0f0f0; border: none; padding: 10px 20px;
+            border-radius: 10px; cursor: pointer; margin-bottom: 20px; font-size: 1em;
         }
-
-        .back-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .type-select {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
+        .back-btn:hover { background: #e0e0e0; }
+        .type-select { display: flex; gap: 10px; margin-bottom: 15px; }
         .type-btn {
-            padding: 10px 20px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 10px 20px; border: 2px solid #e0e0e0; background: white;
+            border-radius: 10px; cursor: pointer; transition: all 0.3s;
         }
-
-        .type-btn.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
+        .type-btn.active { border-color: #667eea; background: #667eea; color: white; }
+        .type-btn:hover { border-color: #667eea; }
+        .loading {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none;
+            justify-content: center; align-items: center; z-index: 3000;
         }
-
-        .type-btn:hover {
-            border-color: #667eea;
+        .loading.active { display: flex; }
+        .loading-content { background: white; padding: 30px 50px; border-radius: 15px; text-align: center; }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea; border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 0 auto 15px;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .sync-status {
+            position: fixed; top: 20px; right: 20px; padding: 10px 20px;
+            background: #4caf50; color: white; border-radius: 10px;
+            font-size: 0.9em; display: none; z-index: 5000;
+        }
+        .sync-status.error { background: #f44336; }
+        .sync-status.show { display: block; }
     </style>
 </head>
 <body>
+    <div id="loadingOverlay" class="loading">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>云端同步中...</p>
+        </div>
+    </div>
+    <div id="syncStatus" class="sync-status"></div>
+
     <div class="container">
         <div class="header">
             <h1>📚 英语听写小助手</h1>
-            <p>让听写变得更有趣！</p>
+            <p>让听写变得更有趣！☁️ 云端同步</p>
         </div>
 
         <div id="loginSection" class="login-section">
             <h2 style="color: #333; margin-bottom: 10px;">请选择你的身份</h2>
             <p style="color: #666;">我是...</p>
-            
             <div class="role-select">
                 <button class="role-btn teacher" onclick="showTeacherLogin()">
-                    <span class="role-icon">👨‍🏫</span>
-                    <span>老师</span>
+                    <span class="role-icon">👨‍🏫</span><span>老师</span>
                 </button>
                 <button class="role-btn student" onclick="showStudentLogin()">
-                    <span class="role-icon">👧👦</span>
-                    <span>学生</span>
+                    <span class="role-icon">👧👦</span><span>学生</span>
                 </button>
             </div>
-
             <div id="teacherLogin" class="student-login">
                 <div class="input-group">
                     <input type="password" id="teacherCode" placeholder="请输入老师密码" />
@@ -517,7 +223,6 @@
                 <button class="btn btn-primary" onclick="teacherLogin()">进入老师后台</button>
                 <button class="btn btn-secondary" onclick="hideTeacherLogin()" style="margin-left: 10px;">返回</button>
             </div>
-
             <div id="studentLogin" class="student-login">
                 <div class="input-group">
                     <input type="text" id="studentName" placeholder="请输入你的名字" />
@@ -529,51 +234,41 @@
 
         <div id="teacherPanel" class="teacher-panel">
             <button class="back-btn" onclick="goBack()">← 返回首页</button>
-            
             <div class="card">
                 <h2>📝 布置今日听写任务</h2>
                 <div class="task-date" id="currentDate"></div>
-                
                 <div class="type-select">
                     <button class="type-btn active" onclick="setTaskType('word')">📖 单词</button>
                     <button class="type-btn" onclick="setTaskType('sentence')">📝 句子</button>
                 </div>
-
                 <div style="margin-bottom: 15px; display: flex; gap: 10px;">
                     <button class="btn btn-secondary" onclick="showSingleInput()">✏️ 单条输入</button>
                     <button class="btn btn-primary" onclick="showBatchInput()">📋 批量导入</button>
                 </div>
-                
                 <div id="singleInput">
                     <div class="task-input">
                         <input type="text" id="taskInput" placeholder="输入单词或句子，按回车添加" />
                         <button class="btn btn-primary" onclick="addTask()">添加</button>
                     </div>
                 </div>
-                
                 <div id="batchInput" style="display: none;">
                     <textarea id="batchTaskInput" placeholder="输入多个单词或句子，每行一个：
 
 apple
 banana
 I love you.
-Good morning.
-Good afternoon.
-Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em; border: 2px solid #e0e0e0; border-radius: 10px; outline: none; resize: vertical;"></textarea>
+Good morning." style="width: 100%; height: 200px; padding: 15px; font-size: 1em; border: 2px solid #e0e0e0; border-radius: 10px; outline: none; resize: vertical;"></textarea>
                     <div style="margin-top: 10px;">
                         <button class="btn btn-primary" onclick="addBatchTasks()">批量添加</button>
-                        <span style="color: #666; margin-left: 15px;">💡 每行输入一个，回车换行</span>
+                        <span style="color: #666; margin-left: 15px;">💡 每行输入一个</span>
                     </div>
                 </div>
-                
                 <ul class="task-list" id="taskList"></ul>
-                
                 <div style="margin-top: 20px; display: flex; gap: 10px;">
                     <button class="btn btn-primary" onclick="publishTasks()">发布任务</button>
                     <button class="btn btn-secondary" onclick="clearAllTasks()">清空列表</button>
                 </div>
             </div>
-
             <div class="card">
                 <h2>📋 历史任务记录</h2>
                 <div id="historyList"></div>
@@ -582,21 +277,13 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
 
         <div id="studentPanel" class="student-panel">
             <button class="back-btn" onclick="goBack()">← 返回首页</button>
-            
             <div class="welcome-msg">
                 <h2>👋 你好，<span id="studentDisplayName"></span>！</h2>
                 <div class="date-badge" id="todayBadge"></div>
             </div>
-
-            <div class="progress-text">
-                进度：<span id="progressText">0 / 0</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-            </div>
-
+            <div class="progress-text">进度：<span id="progressText">0 / 0</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
             <div id="dictationList"></div>
-
             <div id="noTasks" class="card no-tasks" style="display: none;">
                 <div class="icon">📭</div>
                 <p>今天还没有听写任务哦～</p>
@@ -624,52 +311,97 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
     </div>
 
     <script>
+        // ========== 云端配置 ==========
+        const API_KEY = '$2a$10$W5vSecMsHKwfXajNtpcDDuf/ye8ycU3e8IfO4bX62tdzSrdSHjVMO';
+        const BIN_ID = '69ef6884856a6821897a98c8';
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+        // ========== 状态 ==========
         let currentRole = null;
         let currentStudent = null;
         let currentTaskType = 'word';
-        
-        const STORAGE_KEYS = {
-            TASKS: 'dictation_tasks',
-            PROGRESS: 'dictation_progress',
-            HISTORY: 'dictation_history'
-        };
+        let cloudData = { tasks: {}, progress: {}, history: [] };
 
         const TEACHER_CODE = 'teacher123';
 
+        // ========== 云端同步函数 ==========
+        function showLoading() { document.getElementById('loadingOverlay').classList.add('active'); }
+        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
+        function showSyncStatus(msg, isError = false) {
+            const el = document.getElementById('syncStatus');
+            el.textContent = msg;
+            el.className = 'sync-status show' + (isError ? ' error' : '');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // 从云端加载数据
+        async function loadCloudData() {
+            showLoading();
+            try {
+                const res = await fetch(API_URL, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const json = await res.json();
+                if (json.record) {
+                    cloudData = json.record;
+                }
+            } catch (e) {
+                console.error('加载云端数据失败', e);
+                showSyncStatus('⚠️ 云端连接失败，使用本地数据', true);
+            }
+            hideLoading();
+        }
+
+        // 保存数据到云端
+        async function saveCloudData() {
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cloudData)
+                });
+                if (res.ok) {
+                    showSyncStatus('✓ 已同步到云端');
+                }
+            } catch (e) {
+                console.error('保存云端数据失败', e);
+                showSyncStatus('⚠️ 同步失败', true);
+            }
+        }
+
+        // ========== 日期函数 ==========
         function getToday() {
             const today = new Date();
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         }
-
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return date.toLocaleDateString('zh-CN', options);
         }
 
+        // ========== UI 函数 ==========
         function showTeacherLogin() {
             document.getElementById('studentLogin').classList.remove('active');
             document.getElementById('teacherLogin').classList.add('active');
             document.getElementById('teacherCode').focus();
         }
-
-        function hideTeacherLogin() {
-            document.getElementById('teacherLogin').classList.remove('active');
-        }
-
+        function hideTeacherLogin() { document.getElementById('teacherLogin').classList.remove('active'); }
         function showStudentLogin() {
             document.getElementById('teacherLogin').classList.remove('active');
             document.getElementById('studentLogin').classList.add('active');
             document.getElementById('studentName').focus();
         }
+        function hideStudentLogin() { document.getElementById('studentLogin').classList.remove('active'); }
 
-        function hideStudentLogin() {
-            document.getElementById('studentLogin').classList.remove('active');
-        }
-
-        function teacherLogin() {
+        // ========== 登录函数 ==========
+        async function teacherLogin() {
             const code = document.getElementById('teacherCode').value;
             if (code === TEACHER_CODE) {
+                await loadCloudData();
                 currentRole = 'teacher';
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('teacherPanel').classList.add('active');
@@ -681,9 +413,10 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             }
         }
 
-        function studentLogin() {
+        async function studentLogin() {
             const name = document.getElementById('studentName').value.trim();
             if (name) {
+                await loadCloudData();
                 currentRole = 'student';
                 currentStudent = name;
                 document.getElementById('loginSection').style.display = 'none';
@@ -719,29 +452,17 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             });
         }
 
+        // ========== 任务管理 ==========
         function addTask() {
             const input = document.getElementById('taskInput');
             const text = input.value.trim();
-            
-            if (!text) {
-                alert('请输入内容！');
-                return;
-            }
+            if (!text) { alert('请输入内容！'); return; }
 
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            if (!cloudData.tasks[today]) cloudData.tasks[today] = { items: [], published: false };
+            cloudData.tasks[today].items.push({ id: Date.now(), text, type: currentTaskType });
             
-            if (!tasks[today]) {
-                tasks[today] = { items: [], published: false };
-            }
-            
-            tasks[today].items.push({
-                id: Date.now(),
-                text: text,
-                type: currentTaskType
-            });
-            
-            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            saveCloudData();
             input.value = '';
             loadTasks();
         }
@@ -749,42 +470,21 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
         function addBatchTasks() {
             const input = document.getElementById('batchTaskInput');
             const text = input.value.trim();
-            
-            if (!text) {
-                alert('请输入内容！');
-                return;
-            }
+            if (!text) { alert('请输入内容！'); return; }
 
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            if (!cloudData.tasks[today]) cloudData.tasks[today] = { items: [], published: false };
             
-            if (!tasks[today]) {
-                tasks[today] = { items: [], published: false };
-            }
-
             const lines = text.split('\n').filter(line => line.trim());
-            let addedCount = 0;
-
-            lines.forEach(line => {
-                const cleanText = line.trim();
-                if (cleanText) {
-                    tasks[today].items.push({
-                        id: Date.now() + addedCount,
-                        text: cleanText,
-                        type: currentTaskType
-                    });
-                    addedCount++;
-                }
+            lines.forEach((line, i) => {
+                cloudData.tasks[today].items.push({ id: Date.now() + i, text: line.trim(), type: currentTaskType });
             });
             
-            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            saveCloudData();
             input.value = '';
             showSingleInput();
-            
-            if (addedCount > 0) {
-                loadTasks();
-                alert(`成功添加 ${addedCount} 个任务！`);
-            }
+            loadTasks();
+            alert(`成功添加 ${lines.length} 个任务！`);
         }
 
         function showBatchInput() {
@@ -792,7 +492,6 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             document.getElementById('batchInput').style.display = 'block';
             document.getElementById('batchTaskInput').focus();
         }
-
         function showSingleInput() {
             document.getElementById('singleInput').style.display = 'block';
             document.getElementById('batchInput').style.display = 'none';
@@ -800,24 +499,20 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
 
         function deleteTask(id) {
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            
-            if (tasks[today]) {
-                tasks[today].items = tasks[today].items.filter(item => item.id !== id);
-                localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            if (cloudData.tasks[today]) {
+                cloudData.tasks[today].items = cloudData.tasks[today].items.filter(item => item.id !== id);
+                saveCloudData();
                 loadTasks();
             }
         }
 
         function loadTasks() {
             const today = getToday();
-            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            const todayTasks = tasks[today];
-            
+            const todayTasks = cloudData.tasks[today];
             const taskList = document.getElementById('taskList');
             
             if (!todayTasks || todayTasks.items.length === 0) {
-                taskList.innerHTML = '<li style="text-align: center; color: #999; padding: 20px;">还没有添加任务，添加一个试试吧！</li>';
+                taskList.innerHTML = '<li style="text-align: center; color: #999; padding: 20px;">还没有添加任务</li>';
                 return;
             }
             
@@ -831,61 +526,49 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             `).join('');
         }
 
-        function publishTasks() {
+        async function publishTasks() {
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            
-            if (!tasks[today] || tasks[today].items.length === 0) {
+            if (!cloudData.tasks[today] || cloudData.tasks[today].items.length === 0) {
                 alert('请先添加任务！');
                 return;
             }
             
-            tasks[today].published = true;
-            tasks[today].publishedAt = new Date().toISOString();
-            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            cloudData.tasks[today].published = true;
+            cloudData.tasks[today].publishedAt = new Date().toISOString();
             
-            let history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
-            if (!history.find(h => h.date === today)) {
-                history.unshift({ date: today, items: [...tasks[today].items] });
-                localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
+            if (!cloudData.history.find(h => h.date === today)) {
+                cloudData.history.unshift({ date: today, items: [...cloudData.tasks[today].items] });
             }
             
+            await saveCloudData();
             alert('任务发布成功！学生可以看到今天的听写内容了。');
             loadHistory();
         }
 
         function clearAllTasks() {
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            
-            if (tasks[today] && tasks[today].items.length > 0) {
+            if (cloudData.tasks[today] && cloudData.tasks[today].items.length > 0) {
                 document.getElementById('clearModal').classList.add('active');
             }
         }
 
-        function closeClearModal() {
-            document.getElementById('clearModal').classList.remove('active');
-        }
+        function closeClearModal() { document.getElementById('clearModal').classList.remove('active'); }
 
-        function confirmClear() {
+        async function confirmClear() {
             const today = getToday();
-            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            tasks[today] = { items: [], published: false };
-            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            cloudData.tasks[today] = { items: [], published: false };
+            await saveCloudData();
             closeClearModal();
             loadTasks();
         }
 
         function loadHistory() {
-            const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
             const historyList = document.getElementById('historyList');
-            
-            if (history.length === 0) {
+            if (cloudData.history.length === 0) {
                 historyList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">还没有历史记录</p>';
                 return;
             }
-            
-            historyList.innerHTML = history.map(day => `
+            historyList.innerHTML = cloudData.history.map(day => `
                 <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
                     <div style="font-weight: bold; color: #667eea; margin-bottom: 10px;">
                         ${formatDate(day.date)} ${day.date === getToday() ? '(今天)' : ''}
@@ -897,15 +580,14 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             `).join('');
         }
 
+        // ========== 学生端 ==========
         function loadStudentTasks() {
             const today = getToday();
-            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-            const todayTasks = tasks[today];
+            const todayTasks = cloudData.tasks[today];
             const dictationList = document.getElementById('dictationList');
             const noTasks = document.getElementById('noTasks');
             
-            const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
-            const studentProgress = progress[currentStudent] || {};
+            const studentProgress = cloudData.progress[currentStudent] || {};
             const todayProgress = studentProgress[today] || [];
             
             if (!todayTasks || todayTasks.items.length === 0 || !todayTasks.published) {
@@ -924,9 +606,7 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
                     <div class="dictation-card ${isCompleted ? 'completed' : ''}" data-id="${item.id}">
                         <div class="number">${index + 1}</div>
                         <div class="text">${item.text}</div>
-                        <button class="play-btn" onclick="playWord(${item.id}, '${item.text.replace(/'/g, "\\'")}', this)">
-                            ▶
-                        </button>
+                        <button class="play-btn" onclick="playWord(${item.id}, '${item.text.replace(/'/g, "\\'")}', this)">▶</button>
                     </div>
                 `;
             }).join('');
@@ -939,56 +619,38 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
                 alert('抱歉，您的浏览器不支持语音朗读功能！');
                 return;
             }
-            
             speechSynthesis.cancel();
-            
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
             utterance.rate = 0.8;
-            utterance.pitch = 1;
-            
             btn.classList.add('playing');
             btn.textContent = '🔊';
-            
             utterance.onend = function() {
                 btn.classList.remove('playing');
                 btn.textContent = '▶';
                 markAsCompleted(id);
             };
-            
             utterance.onerror = function() {
                 btn.classList.remove('playing');
                 btn.textContent = '▶';
             };
-            
             speechSynthesis.speak(utterance);
         }
 
-        function markAsCompleted(id) {
+        async function markAsCompleted(id) {
             const today = getToday();
-            const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
+            if (!cloudData.progress[currentStudent]) cloudData.progress[currentStudent] = {};
+            if (!cloudData.progress[currentStudent][today]) cloudData.progress[currentStudent][today] = [];
             
-            if (!progress[currentStudent]) {
-                progress[currentStudent] = {};
-            }
-            
-            if (!progress[currentStudent][today]) {
-                progress[currentStudent][today] = [];
-            }
-            
-            if (!progress[currentStudent][today].includes(id)) {
-                progress[currentStudent][today].push(id);
-                localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
+            if (!cloudData.progress[currentStudent][today].includes(id)) {
+                cloudData.progress[currentStudent][today].push(id);
+                await saveCloudData();
                 
                 const card = document.querySelector(`.dictation-card[data-id="${id}"]`);
-                if (card) {
-                    card.classList.add('completed');
-                }
+                if (card) card.classList.add('completed');
                 
-                const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
-                const todayTasks = tasks[today];
-                const todayProgress = progress[currentStudent][today];
-                
+                const todayTasks = cloudData.tasks[today];
+                const todayProgress = cloudData.progress[currentStudent][today];
                 updateProgress(todayProgress.length, todayTasks ? todayTasks.items.length : 0);
                 
                 if (todayTasks && todayProgress.length === todayTasks.items.length) {
@@ -1010,23 +672,16 @@ Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em;
             }, 3000);
         }
 
+        // ========== 回车事件 ==========
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('taskInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addTask();
-                }
+                if (e.key === 'Enter') addTask();
             });
-            
             document.getElementById('teacherCode').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    teacherLogin();
-                }
+                if (e.key === 'Enter') teacherLogin();
             });
-            
             document.getElementById('studentName').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    studentLogin();
-                }
+                if (e.key === 'Enter') studentLogin();
             });
         });
     </script>
