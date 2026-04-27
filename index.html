@@ -23,7 +23,6 @@
             padding: 20px;
         }
 
-        /* 头部样式 */
         .header {
             text-align: center;
             padding: 30px 20px;
@@ -44,7 +43,6 @@
             font-size: 1.1em;
         }
 
-        /* 登录/角色选择 */
         .login-section {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -93,7 +91,6 @@
             font-size: 3em;
         }
 
-        /* 学生输入名字 */
         .student-login {
             margin-top: 30px;
             display: none;
@@ -145,7 +142,6 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* 老师布置任务 */
         .teacher-panel {
             display: none;
         }
@@ -215,7 +211,6 @@
             cursor: pointer;
         }
 
-        /* 学生任务面板 */
         .student-panel {
             display: none;
         }
@@ -312,7 +307,6 @@
             50% { transform: scale(1.1); }
         }
 
-        /* 进度条 */
         .progress-bar {
             background: #e0e0e0;
             border-radius: 10px;
@@ -334,7 +328,6 @@
             margin-bottom: 20px;
         }
 
-        /* 完成的卡片样式 */
         .dictation-card.completed {
             opacity: 0.7;
             background: #f0fff0;
@@ -344,7 +337,6 @@
             text-decoration: line-through;
         }
 
-        /* 老师任务列表 */
         .task-date {
             font-size: 1.1em;
             color: #666;
@@ -362,7 +354,6 @@
             margin-bottom: 15px;
         }
 
-        /* 确认对话框 */
         .modal {
             display: none;
             position: fixed;
@@ -400,7 +391,6 @@
             margin-top: 20px;
         }
 
-        /* 成功动画 */
         .success-overlay {
             position: fixed;
             top: 0;
@@ -438,7 +428,6 @@
             50% { transform: scale(1.2); }
         }
 
-        /* 响应式 */
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.6em;
@@ -459,7 +448,6 @@
             }
         }
 
-        /* 返回按钮 */
         .back-btn {
             background: #f0f0f0;
             border: none;
@@ -474,7 +462,6 @@
             background: #e0e0e0;
         }
 
-        /* 单词类型选择 */
         .type-select {
             display: flex;
             gap: 10px;
@@ -503,13 +490,11 @@
 </head>
 <body>
     <div class="container">
-        <!-- 头部 -->
         <div class="header">
             <h1>📚 英语听写小助手</h1>
             <p>让听写变得更有趣！</p>
         </div>
 
-        <!-- 角色选择 -->
         <div id="loginSection" class="login-section">
             <h2 style="color: #333; margin-bottom: 10px;">请选择你的身份</h2>
             <p style="color: #666;">我是...</p>
@@ -525,7 +510,6 @@
                 </button>
             </div>
 
-            <!-- 老师登录 -->
             <div id="teacherLogin" class="student-login">
                 <div class="input-group">
                     <input type="password" id="teacherCode" placeholder="请输入老师密码" />
@@ -534,7 +518,6 @@
                 <button class="btn btn-secondary" onclick="hideTeacherLogin()" style="margin-left: 10px;">返回</button>
             </div>
 
-            <!-- 学生登录 -->
             <div id="studentLogin" class="student-login">
                 <div class="input-group">
                     <input type="text" id="studentName" placeholder="请输入你的名字" />
@@ -544,7 +527,6 @@
             </div>
         </div>
 
-        <!-- 老师面板 -->
         <div id="teacherPanel" class="teacher-panel">
             <button class="back-btn" onclick="goBack()">← 返回首页</button>
             
@@ -556,10 +538,32 @@
                     <button class="type-btn active" onclick="setTaskType('word')">📖 单词</button>
                     <button class="type-btn" onclick="setTaskType('sentence')">📝 句子</button>
                 </div>
+
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="showSingleInput()">✏️ 单条输入</button>
+                    <button class="btn btn-primary" onclick="showBatchInput()">📋 批量导入</button>
+                </div>
                 
-                <div class="task-input">
-                    <input type="text" id="taskInput" placeholder="输入单词或句子，按回车添加" />
-                    <button class="btn btn-primary" onclick="addTask()">添加</button>
+                <div id="singleInput">
+                    <div class="task-input">
+                        <input type="text" id="taskInput" placeholder="输入单词或句子，按回车添加" />
+                        <button class="btn btn-primary" onclick="addTask()">添加</button>
+                    </div>
+                </div>
+                
+                <div id="batchInput" style="display: none;">
+                    <textarea id="batchTaskInput" placeholder="输入多个单词或句子，每行一个：
+
+apple
+banana
+I love you.
+Good morning.
+Good afternoon.
+Good evening." style="width: 100%; height: 200px; padding: 15px; font-size: 1em; border: 2px solid #e0e0e0; border-radius: 10px; outline: none; resize: vertical;"></textarea>
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary" onclick="addBatchTasks()">批量添加</button>
+                        <span style="color: #666; margin-left: 15px;">💡 每行输入一个，回车换行</span>
+                    </div>
                 </div>
                 
                 <ul class="task-list" id="taskList"></ul>
@@ -576,7 +580,6 @@
             </div>
         </div>
 
-        <!-- 学生面板 -->
         <div id="studentPanel" class="student-panel">
             <button class="back-btn" onclick="goBack()">← 返回首页</button>
             
@@ -602,7 +605,6 @@
         </div>
     </div>
 
-    <!-- 确认清空对话框 -->
     <div id="clearModal" class="modal">
         <div class="modal-content">
             <h3>确认清空所有任务？</h3>
@@ -614,7 +616,6 @@
         </div>
     </div>
 
-    <!-- 完成成功动画 -->
     <div id="successOverlay" class="success-overlay">
         <div class="success-content">
             <div class="icon">🎉</div>
@@ -623,34 +624,29 @@
     </div>
 
     <script>
-        // 数据存储
         let currentRole = null;
         let currentStudent = null;
         let currentTaskType = 'word';
         
-        // LocalStorage 数据管理
         const STORAGE_KEYS = {
             TASKS: 'dictation_tasks',
             PROGRESS: 'dictation_progress',
             HISTORY: 'dictation_history'
         };
 
-        const TEACHER_CODE = 'teacher123'; // 老师密码
+        const TEACHER_CODE = 'teacher123';
 
-        // 获取今天的日期
         function getToday() {
             const today = new Date();
             return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         }
 
-        // 格式化日期显示
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return date.toLocaleDateString('zh-CN', options);
         }
 
-        // 显示/隐藏登录面板
         function showTeacherLogin() {
             document.getElementById('studentLogin').classList.remove('active');
             document.getElementById('teacherLogin').classList.add('active');
@@ -671,7 +667,6 @@
             document.getElementById('studentLogin').classList.remove('active');
         }
 
-        // 老师登录
         function teacherLogin() {
             const code = document.getElementById('teacherCode').value;
             if (code === TEACHER_CODE) {
@@ -686,7 +681,6 @@
             }
         }
 
-        // 学生登录
         function studentLogin() {
             const name = document.getElementById('studentName').value.trim();
             if (name) {
@@ -702,7 +696,6 @@
             }
         }
 
-        // 返回首页
         function goBack() {
             currentRole = null;
             currentStudent = null;
@@ -715,7 +708,6 @@
             hideStudentLogin();
         }
 
-        // 设置任务类型
         function setTaskType(type) {
             currentTaskType = type;
             document.querySelectorAll('.type-btn').forEach(btn => {
@@ -727,7 +719,6 @@
             });
         }
 
-        // 添加任务
         function addTask() {
             const input = document.getElementById('taskInput');
             const text = input.value.trim();
@@ -755,7 +746,58 @@
             loadTasks();
         }
 
-        // 删除任务
+        function addBatchTasks() {
+            const input = document.getElementById('batchTaskInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('请输入内容！');
+                return;
+            }
+
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            
+            if (!tasks[today]) {
+                tasks[today] = { items: [], published: false };
+            }
+
+            const lines = text.split('\n').filter(line => line.trim());
+            let addedCount = 0;
+
+            lines.forEach(line => {
+                const cleanText = line.trim();
+                if (cleanText) {
+                    tasks[today].items.push({
+                        id: Date.now() + addedCount,
+                        text: cleanText,
+                        type: currentTaskType
+                    });
+                    addedCount++;
+                }
+            });
+            
+            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            input.value = '';
+            showSingleInput();
+            
+            if (addedCount > 0) {
+                loadTasks();
+                alert(`成功添加 ${addedCount} 个任务！`);
+            }
+        }
+
+        function showBatchInput() {
+            document.getElementById('singleInput').style.display = 'none';
+            document.getElementById('batchInput').style.display = 'block';
+            document.getElementById('batchTaskInput').focus();
+        }
+
+        function showSingleInput() {
+            document.getElementById('singleInput').style.display = 'block';
+            document.getElementById('batchInput').style.display = 'none';
+        }
+
         function deleteTask(id) {
             const today = getToday();
             let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
@@ -767,7 +809,6 @@
             }
         }
 
-        // 加载任务列表
         function loadTasks() {
             const today = getToday();
             const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
@@ -790,7 +831,6 @@
             `).join('');
         }
 
-        // 发布任务
         function publishTasks() {
             const today = getToday();
             let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
@@ -804,7 +844,6 @@
             tasks[today].publishedAt = new Date().toISOString();
             localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
             
-            // 保存到历史记录
             let history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
             if (!history.find(h => h.date === today)) {
                 history.unshift({ date: today, items: [...tasks[today].items] });
@@ -815,7 +854,6 @@
             loadHistory();
         }
 
-        // 清空任务
         function clearAllTasks() {
             const today = getToday();
             let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
@@ -838,7 +876,6 @@
             loadTasks();
         }
 
-        // 加载历史记录
         function loadHistory() {
             const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
             const historyList = document.getElementById('historyList');
@@ -860,7 +897,6 @@
             `).join('');
         }
 
-        // 学生加载任务
         function loadStudentTasks() {
             const today = getToday();
             const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
@@ -868,7 +904,6 @@
             const dictationList = document.getElementById('dictationList');
             const noTasks = document.getElementById('noTasks');
             
-            // 获取学生进度
             const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
             const studentProgress = progress[currentStudent] || {};
             const todayProgress = studentProgress[today] || [];
@@ -889,7 +924,7 @@
                     <div class="dictation-card ${isCompleted ? 'completed' : ''}" data-id="${item.id}">
                         <div class="number">${index + 1}</div>
                         <div class="text">${item.text}</div>
-                        <button class="play-btn ${isCompleted ? '' : ''}" onclick="playWord(${item.id}, '${item.text.replace(/'/g, "\\'")}', this)">
+                        <button class="play-btn" onclick="playWord(${item.id}, '${item.text.replace(/'/g, "\\'")}', this)">
                             ▶
                         </button>
                     </div>
@@ -899,31 +934,25 @@
             updateProgress(todayProgress.length, todayTasks.items.length);
         }
 
-        // 播放语音
         function playWord(id, text, btn) {
-            // 如果浏览器不支持 SpeechSynthesis
             if (!('speechSynthesis' in window)) {
                 alert('抱歉，您的浏览器不支持语音朗读功能！');
                 return;
             }
             
-            // 取消之前的朗读
             speechSynthesis.cancel();
             
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; // 设置为英语
-            utterance.rate = 0.8; // 稍微放慢速度
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
             utterance.pitch = 1;
             
-            // 显示播放状态
             btn.classList.add('playing');
             btn.textContent = '🔊';
             
             utterance.onend = function() {
                 btn.classList.remove('playing');
                 btn.textContent = '▶';
-                
-                // 标记为完成
                 markAsCompleted(id);
             };
             
@@ -935,7 +964,6 @@
             speechSynthesis.speak(utterance);
         }
 
-        // 标记为完成
         function markAsCompleted(id) {
             const today = getToday();
             const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
@@ -952,34 +980,29 @@
                 progress[currentStudent][today].push(id);
                 localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
                 
-                // 更新UI
                 const card = document.querySelector(`.dictation-card[data-id="${id}"]`);
                 if (card) {
                     card.classList.add('completed');
                 }
                 
-                // 更新进度
                 const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
                 const todayTasks = tasks[today];
                 const todayProgress = progress[currentStudent][today];
                 
                 updateProgress(todayProgress.length, todayTasks ? todayTasks.items.length : 0);
                 
-                // 检查是否全部完成
                 if (todayTasks && todayProgress.length === todayTasks.items.length) {
                     setTimeout(showSuccess, 500);
                 }
             }
         }
 
-        // 更新进度条
         function updateProgress(completed, total) {
             const percentage = total > 0 ? (completed / total) * 100 : 0;
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressText').textContent = `${completed} / ${total}`;
         }
 
-        // 显示成功动画
         function showSuccess() {
             document.getElementById('successOverlay').classList.add('active');
             setTimeout(() => {
@@ -987,7 +1010,6 @@
             }, 3000);
         }
 
-        // 回车键添加任务
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('taskInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
