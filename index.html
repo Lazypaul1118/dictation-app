@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语听写小助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        /* 登录/角色选择 */
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-select {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 25px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .role-btn.teacher {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .role-btn.student {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .role-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-icon {
+            font-size: 3em;
+        }
+
+        /* 学生输入名字 */
+        .student-login {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .student-login.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 老师布置任务 */
+        .teacher-panel {
+            display: none;
+        }
+
+        .teacher-panel.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .task-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-input input {
+            flex: 1;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .task-input input:focus {
+            border-color: #667eea;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .task-item .word {
+            flex: 1;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .task-item .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* 学生任务面板 */
+        .student-panel {
+            display: none;
+        }
+
+        .student-panel.active {
+            display: block;
+        }
+
+        .welcome-msg {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-msg h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .dictation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .dictation-card:hover {
+            transform: translateX(10px);
+        }
+
+        .dictation-card .number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .dictation-card .text {
+            flex: 1;
+            font-size: 1.4em;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
+        }
+
+        .play-btn.playing {
+            animation: pulse 1s infinite;
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* 完成的卡片样式 */
+        .dictation-card.completed {
+            opacity: 0.7;
+            background: #f0fff0;
+        }
+
+        .dictation-card.completed .text {
+            text-decoration: line-through;
+        }
+
+        /* 老师任务列表 */
+        .task-date {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .no-tasks {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .no-tasks .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        /* 确认对话框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* 成功动画 */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(102, 126, 234, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .success-overlay.active {
+            display: flex;
+        }
+
+        .success-content {
+            text-align: center;
+            color: white;
+        }
+
+        .success-content .icon {
+            font-size: 8em;
+            animation: bounce 0.5s ease;
+        }
+
+        .success-content h2 {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .role-btn {
+                padding: 20px 30px;
+                font-size: 1em;
+            }
+            
+            .dictation-card {
+                flex-wrap: wrap;
+            }
+            
+            .play-btn {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* 单词类型选择 */
+        .type-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .type-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .type-btn:hover {
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📚 英语听写小助手</h1>
+            <p>让听写变得更有趣！</p>
+        </div>
+
+        <!-- 角色选择 -->
+        <div id="loginSection" class="login-section">
+            <h2 style="color: #333; margin-bottom: 10px;">请选择你的身份</h2>
+            <p style="color: #666;">我是...</p>
+            
+            <div class="role-select">
+                <button class="role-btn teacher" onclick="showTeacherLogin()">
+                    <span class="role-icon">👨‍🏫</span>
+                    <span>老师</span>
+                </button>
+                <button class="role-btn student" onclick="showStudentLogin()">
+                    <span class="role-icon">👧👦</span>
+                    <span>学生</span>
+                </button>
+            </div>
+
+            <!-- 老师登录 -->
+            <div id="teacherLogin" class="student-login">
+                <div class="input-group">
+                    <input type="password" id="teacherCode" placeholder="请输入老师密码" />
+                </div>
+                <button class="btn btn-primary" onclick="teacherLogin()">进入老师后台</button>
+                <button class="btn btn-secondary" onclick="hideTeacherLogin()" style="margin-left: 10px;">返回</button>
+            </div>
+
+            <!-- 学生登录 -->
+            <div id="studentLogin" class="student-login">
+                <div class="input-group">
+                    <input type="text" id="studentName" placeholder="请输入你的名字" />
+                </div>
+                <button class="btn btn-primary" onclick="studentLogin()">开始听写</button>
+                <button class="btn btn-secondary" onclick="hideStudentLogin()" style="margin-left: 10px;">返回</button>
+            </div>
+        </div>
+
+        <!-- 老师面板 -->
+        <div id="teacherPanel" class="teacher-panel">
+            <button class="back-btn" onclick="goBack()">← 返回首页</button>
+            
+            <div class="card">
+                <h2>📝 布置今日听写任务</h2>
+                <div class="task-date" id="currentDate"></div>
+                
+                <div class="type-select">
+                    <button class="type-btn active" onclick="setTaskType('word')">📖 单词</button>
+                    <button class="type-btn" onclick="setTaskType('sentence')">📝 句子</button>
+                </div>
+                
+                <div class="task-input">
+                    <input type="text" id="taskInput" placeholder="输入单词或句子，按回车添加" />
+                    <button class="btn btn-primary" onclick="addTask()">添加</button>
+                </div>
+                
+                <ul class="task-list" id="taskList"></ul>
+                
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="publishTasks()">发布任务</button>
+                    <button class="btn btn-secondary" onclick="clearAllTasks()">清空列表</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 历史任务记录</h2>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <!-- 学生面板 -->
+        <div id="studentPanel" class="student-panel">
+            <button class="back-btn" onclick="goBack()">← 返回首页</button>
+            
+            <div class="welcome-msg">
+                <h2>👋 你好，<span id="studentDisplayName"></span>！</h2>
+                <div class="date-badge" id="todayBadge"></div>
+            </div>
+
+            <div class="progress-text">
+                进度：<span id="progressText">0 / 0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div id="dictationList"></div>
+
+            <div id="noTasks" class="card no-tasks" style="display: none;">
+                <div class="icon">📭</div>
+                <p>今天还没有听写任务哦～</p>
+                <p style="margin-top: 10px; color: #aaa;">问问老师什么时候布置吧！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认清空对话框 -->
+    <div id="clearModal" class="modal">
+        <div class="modal-content">
+            <h3>确认清空所有任务？</h3>
+            <p style="color: #666; margin: 10px 0;">这个操作无法撤销</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClearModal()">取消</button>
+                <button class="btn btn-primary" onclick="confirmClear()" style="background: #ff4757;">确认清空</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完成成功动画 -->
+    <div id="successOverlay" class="success-overlay">
+        <div class="success-content">
+            <div class="icon">🎉</div>
+            <h2>太棒了！听写完成！</h2>
+        </div>
+    </div>
+
+    <script>
+        // 数据存储
+        let currentRole = null;
+        let currentStudent = null;
+        let currentTaskType = 'word';
+        
+        // LocalStorage 数据管理
+        const STORAGE_KEYS = {
+            TASKS: 'dictation_tasks',
+            PROGRESS: 'dictation_progress',
+            HISTORY: 'dictation_history'
+        };
+
+        const TEACHER_CODE = 'teacher123'; // 老师密码
+
+        // 获取今天的日期
+        function getToday() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        // 格式化日期显示
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('zh-CN', options);
+        }
+
+        // 显示/隐藏登录面板
+        function showTeacherLogin() {
+            document.getElementById('studentLogin').classList.remove('active');
+            document.getElementById('teacherLogin').classList.add('active');
+            document.getElementById('teacherCode').focus();
+        }
+
+        function hideTeacherLogin() {
+            document.getElementById('teacherLogin').classList.remove('active');
+        }
+
+        function showStudentLogin() {
+            document.getElementById('teacherLogin').classList.remove('active');
+            document.getElementById('studentLogin').classList.add('active');
+            document.getElementById('studentName').focus();
+        }
+
+        function hideStudentLogin() {
+            document.getElementById('studentLogin').classList.remove('active');
+        }
+
+        // 老师登录
+        function teacherLogin() {
+            const code = document.getElementById('teacherCode').value;
+            if (code === TEACHER_CODE) {
+                currentRole = 'teacher';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('teacherPanel').classList.add('active');
+                document.getElementById('currentDate').textContent = formatDate(getToday());
+                loadTasks();
+                loadHistory();
+            } else {
+                alert('密码错误，请重试！');
+            }
+        }
+
+        // 学生登录
+        function studentLogin() {
+            const name = document.getElementById('studentName').value.trim();
+            if (name) {
+                currentRole = 'student';
+                currentStudent = name;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('studentPanel').classList.add('active');
+                document.getElementById('studentDisplayName').textContent = name;
+                document.getElementById('todayBadge').textContent = formatDate(getToday());
+                loadStudentTasks();
+            } else {
+                alert('请输入你的名字！');
+            }
+        }
+
+        // 返回首页
+        function goBack() {
+            currentRole = null;
+            currentStudent = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('teacherPanel').classList.remove('active');
+            document.getElementById('studentPanel').classList.remove('active');
+            document.getElementById('teacherCode').value = '';
+            document.getElementById('studentName').value = '';
+            hideTeacherLogin();
+            hideStudentLogin();
+        }
+
+        // 设置任务类型
+        function setTaskType(type) {
+            currentTaskType = type;
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((type === 'word' && btn.textContent.includes('单词')) ||
+                    (type === 'sentence' && btn.textContent.includes('句子'))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // 添加任务
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('请输入内容！');
+                return;
+            }
+
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            
+            if (!tasks[today]) {
+                tasks[today] = { items: [], published: false };
+            }
+            
+            tasks[today].items.push({
+                id: Date.now(),
+                text: text,
+                type: currentTaskType
+            });
+            
+            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            input.value = '';
+            loadTasks();
+        }
+
+        // 删除任务
+        function deleteTask(id) {
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            
+            if (tasks[today]) {
+                tasks[today].items = tasks[today].items.filter(item => item.id !== id);
+                localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+                loadTasks();
+            }
+        }
+
+        // 加载任务列表
+        function loadTasks() {
+            const today = getToday();
+            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            const todayTasks = tasks[today];
+            
+            const taskList = document.getElementById('taskList');
+            
+            if (!todayTasks || todayTasks.items.length === 0) {
+                taskList.innerHTML = '<li style="text-align: center; color: #999; padding: 20px;">还没有添加任务，添加一个试试吧！</li>';
+                return;
+            }
+            
+            taskList.innerHTML = todayTasks.items.map((item, index) => `
+                <li class="task-item">
+                    <span style="color: #667eea; margin-right: 10px;">${index + 1}.</span>
+                    <span class="word">${item.text}</span>
+                    <span style="color: #999; font-size: 0.9em; margin-right: 15px;">${item.type === 'word' ? '📖' : '📝'}</span>
+                    <button class="delete-btn" onclick="deleteTask(${item.id})">删除</button>
+                </li>
+            `).join('');
+        }
+
+        // 发布任务
+        function publishTasks() {
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            
+            if (!tasks[today] || tasks[today].items.length === 0) {
+                alert('请先添加任务！');
+                return;
+            }
+            
+            tasks[today].published = true;
+            tasks[today].publishedAt = new Date().toISOString();
+            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            
+            // 保存到历史记录
+            let history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+            if (!history.find(h => h.date === today)) {
+                history.unshift({ date: today, items: [...tasks[today].items] });
+                localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
+            }
+            
+            alert('任务发布成功！学生可以看到今天的听写内容了。');
+            loadHistory();
+        }
+
+        // 清空任务
+        function clearAllTasks() {
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            
+            if (tasks[today] && tasks[today].items.length > 0) {
+                document.getElementById('clearModal').classList.add('active');
+            }
+        }
+
+        function closeClearModal() {
+            document.getElementById('clearModal').classList.remove('active');
+        }
+
+        function confirmClear() {
+            const today = getToday();
+            let tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            tasks[today] = { items: [], published: false };
+            localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+            closeClearModal();
+            loadTasks();
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+            const historyList = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">还没有历史记录</p>';
+                return;
+            }
+            
+            historyList.innerHTML = history.map(day => `
+                <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
+                    <div style="font-weight: bold; color: #667eea; margin-bottom: 10px;">
+                        ${formatDate(day.date)} ${day.date === getToday() ? '(今天)' : ''}
+                    </div>
+                    <div style="color: #666;">
+                        ${day.items.map(item => `${item.type === 'word' ? '📖' : '📝'} ${item.text}`).join(' | ')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 学生加载任务
+        function loadStudentTasks() {
+            const today = getToday();
+            const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+            const todayTasks = tasks[today];
+            const dictationList = document.getElementById('dictationList');
+            const noTasks = document.getElementById('noTasks');
+            
+            // 获取学生进度
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
+            const studentProgress = progress[currentStudent] || {};
+            const todayProgress = studentProgress[today] || [];
+            
+            if (!todayTasks || todayTasks.items.length === 0 || !todayTasks.published) {
+                dictationList.style.display = 'none';
+                noTasks.style.display = 'block';
+                updateProgress(0, 0);
+                return;
+            }
+            
+            dictationList.style.display = 'block';
+            noTasks.style.display = 'none';
+            
+            dictationList.innerHTML = todayTasks.items.map((item, index) => {
+                const isCompleted = todayProgress.includes(item.id);
+                return `
+                    <div class="dictation-card ${isCompleted ? 'completed' : ''}" data-id="${item.id}">
+                        <div class="number">${index + 1}</div>
+                        <div class="text">${item.text}</div>
+                        <button class="play-btn ${isCompleted ? '' : ''}" onclick="playWord(${item.id}, '${item.text.replace(/'/g, "\\'")}', this)">
+                            ▶
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            updateProgress(todayProgress.length, todayTasks.items.length);
+        }
+
+        // 播放语音
+        function playWord(id, text, btn) {
+            // 如果浏览器不支持 SpeechSynthesis
+            if (!('speechSynthesis' in window)) {
+                alert('抱歉，您的浏览器不支持语音朗读功能！');
+                return;
+            }
+            
+            // 取消之前的朗读
+            speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US'; // 设置为英语
+            utterance.rate = 0.8; // 稍微放慢速度
+            utterance.pitch = 1;
+            
+            // 显示播放状态
+            btn.classList.add('playing');
+            btn.textContent = '🔊';
+            
+            utterance.onend = function() {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                
+                // 标记为完成
+                markAsCompleted(id);
+            };
+            
+            utterance.onerror = function() {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        // 标记为完成
+        function markAsCompleted(id) {
+            const today = getToday();
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRESS) || '{}');
+            
+            if (!progress[currentStudent]) {
+                progress[currentStudent] = {};
+            }
+            
+            if (!progress[currentStudent][today]) {
+                progress[currentStudent][today] = [];
+            }
+            
+            if (!progress[currentStudent][today].includes(id)) {
+                progress[currentStudent][today].push(id);
+                localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progress));
+                
+                // 更新UI
+                const card = document.querySelector(`.dictation-card[data-id="${id}"]`);
+                if (card) {
+                    card.classList.add('completed');
+                }
+                
+                // 更新进度
+                const tasks = JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS) || '{}');
+                const todayTasks = tasks[today];
+                const todayProgress = progress[currentStudent][today];
+                
+                updateProgress(todayProgress.length, todayTasks ? todayTasks.items.length : 0);
+                
+                // 检查是否全部完成
+                if (todayTasks && todayProgress.length === todayTasks.items.length) {
+                    setTimeout(showSuccess, 500);
+                }
+            }
+        }
+
+        // 更新进度条
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? (completed / total) * 100 : 0;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${completed} / ${total}`;
+        }
+
+        // 显示成功动画
+        function showSuccess() {
+            document.getElementById('successOverlay').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('successOverlay').classList.remove('active');
+            }, 3000);
+        }
+
+        // 回车键添加任务
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('taskInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
+            
+            document.getElementById('teacherCode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    teacherLogin();
+                }
+            });
+            
+            document.getElementById('studentName').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    studentLogin();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
